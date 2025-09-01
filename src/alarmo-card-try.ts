@@ -42,7 +42,7 @@ import { fireEvent } from './lib/fire-event';
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'clear'];
 
 @customElement('alarmo-card-try')
-export class AlarmoCard extends SubscribeMixin(LitElement) {
+export class AlarmoCardTry extends SubscribeMixin(LitElement) {
   @property({ attribute: false })
   public hass?: HomeAssistant;
 
