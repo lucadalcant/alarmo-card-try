@@ -41,7 +41,7 @@ import { fireEvent } from './lib/fire-event';
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'clear'];
 
-@customElement('alarmo-card')
+@customElement('alarmo-card-try')
 export class AlarmoCard extends SubscribeMixin(LitElement) {
   @property({ attribute: false })
   public hass?: HomeAssistant;
@@ -94,7 +94,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     });
 
     return {
-      type: `custom:alarmo-card`,
+      type: `custom:alarmo-card-try`,
       entity: defaultEntity,
     };
   }
@@ -828,8 +828,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
-  type: 'alarmo-card',
-  name: 'Alarmo Card',
+  type: 'alarmo-card-try',
+  name: 'Alarmo Card Try',
   description: 'Card for operating Alarmo through Lovelace.',
   preview: true,
 });
