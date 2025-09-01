@@ -1,0 +1,33 @@
+{
+  "arm_options": {
+    "heading": "Opciones de armado",
+    "skip_delay": "Omitir el retardo de salida",
+    "force": "Pasar por alto los sensores abiertos"
+  },
+  "editor": {
+    "keep_keypad_visible": "Mantener el teclado siempre visible, también cuando no se requiere ninguna entrada de código.",
+    "button_scale_actions": "Factor de escalado para cambiar el tamaño de los botones de acción.",
+    "button_scale_keypad": "Factor de escalado para cambiar el tamaño de los botones del teclado.",
+    "use_clear_icon": "Mostrar icono (en lugar de texto) en el teclado para borrar la entrada de código.",
+    "show_messages": "Mostrar mensajes de diagnóstico cuando se activa la alarma o no se puede activar.",
+    "show_ready_indicator": "Mostrar indicador listo/no listo en los botones de modo armado.",
+    "show_bypassed_sensors": "Mostrar advertencia cuando la alarma está activada con sensores omitidos.",
+    "use_code_dialog": "Muestra el teclado para ingresar el código como un cuadro de diálogo emergente.",
+    "hide_keypad": "Ocultar los botones del teclado para ingresar el código.",
+    "show_code_inputfield": "Mostrar campo de entrada de código",
+    "show_header": "Mostrar encabezado",
+    "use_arm_button_icons": "Utilice iconos en los botones de acción (en lugar de etiquetas)",
+    "available_actions": "Acciones disponibles:",
+    "action_dialog": {
+      "title": "Personalizar la visualización de la acción '{action}'",
+      "show_button": "mostrar botón para esta acción",
+      "button_label": "Sobrescribir el texto del botón",
+      "state_label": "Sobrescribir el texto de estado"
+    }
+  },
+  "errors": {
+    "blocking_sensors": "No se pudo armar debido a los siguientes sensores",
+    "triggered_sensors": "La alarma fue disparada por los siguientes sensores",
+    "bypassed_sensors": "Hay sensores omitidos"
+  }
+}
