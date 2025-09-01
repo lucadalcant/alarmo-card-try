@@ -1,10 +1,10 @@
-import { HassEntity } from 'home-assistant-js-websocket';
-import { ArmActions, AlarmStates } from '../const';
-import { CardConfig } from '../types';
-import { calcStateConfig } from './config';
-import { isEmpty } from '../helpers';
-import { LocalizeFunc } from '../lib/types';
-import { computeDomain } from '../lib/compute-domain';
+import { HassEntity } from "home-assistant-js-websocket";
+import { ArmActions, AlarmStates } from "../const";
+import { CardConfig } from "../types";
+import { calcStateConfig } from "./config";
+import { isEmpty } from "../helpers";
+import { LocalizeFunc } from "../lib/types";
+import { computeDomain } from "../lib/compute-domain";
 
 export const calcSupportedActions = (stateObj: HassEntity) => {
   if (!stateObj) return [];
@@ -18,7 +18,11 @@ export const calcSupportedActions = (stateObj: HassEntity) => {
   return actions;
 };
 
-export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc, config?: CardConfig) => {
+export const computeStateDisplay = (
+  stateObj: HassEntity,
+  localize: LocalizeFunc,
+  config?: CardConfig,
+) => {
   const domain = computeDomain(stateObj.entity_id);
   const deviceClass = stateObj.attributes.device_class;
   const state = stateObj.state;
@@ -27,15 +31,25 @@ export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc
     const stateConfig = calcStateConfig(state as AlarmStates, config);
     if (!isEmpty(stateConfig.state_label)) return stateConfig.state_label;
   }
-  let translation = '';
+  let translation = "";
   if (deviceClass)
-    translation = localize(`component.${domain}.entity_component.${deviceClass}.state.${stateObj.state}`);
-  if (!translation) translation = localize(`component.${domain}.entity_component._.state.${stateObj.state}`);
+    translation = localize(
+      `component.${domain}.entity_component.${deviceClass}.state.${stateObj.state}`,
+    );
+  if (!translation)
+    translation = localize(
+      `component.${domain}.entity_component._.state.${stateObj.state}`,
+    );
   return translation;
 };
 
-export const computeNameDisplay = (stateObj: HassEntity, config: CardConfig) => {
-  return !isEmpty(config.name) ? config.name : stateObj.attributes.friendly_name;
+export const computeNameDisplay = (
+  stateObj: HassEntity,
+  config: CardConfig,
+) => {
+  return !isEmpty(config.name)
+    ? config.name
+    : stateObj.attributes.friendly_name;
 };
 
 export const codeRequired = (stateObj: HassEntity) => {
@@ -43,13 +57,13 @@ export const codeRequired = (stateObj: HassEntity) => {
 };
 
 export const computeStateColor = (stateObj: HassEntity) => {
-  if (!stateObj || !stateObj.state) return 'var(--state-unavailable-color)';
+  if (!stateObj || !stateObj.state) return "var(--state-unavailable-color)";
 
   const state = stateObj.state;
   if (state == AlarmStates.Disarmed)
-    return 'var(--state-alarm_control_panel-disarmed-color, var(--state-alarm_control_panel-inactive-color, var(--state-inactive-color)))';
+    return "var(--state-alarm_control_panel-disarmed-color, var(--state-alarm_control_panel-inactive-color, var(--state-inactive-color)))";
   if (Object.values(AlarmStates).includes(state as any))
     return `var(--state-alarm_control_panel-${state}-color, var(--state-alarm_control_panel-active-color, var(--state-active-color)))`;
 
-  return 'var(--disabled-color, var(--state-inactive-color))';
+  return "var(--disabled-color, var(--state-inactive-color))";
 };

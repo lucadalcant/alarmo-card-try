@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit';
-import { property } from 'lit/decorators.js';
+import { LitElement, html, css } from "lit";
+import { property } from "lit/decorators.js";
 
 class AlarmoButton extends LitElement {
   @property({ type: Boolean })
@@ -49,7 +49,7 @@ class AlarmoButton extends LitElement {
         right: 0;
         bottom: 0;
         left: 0;
-        content: '';
+        content: "";
         border-radius: 4px;
         background: var(--primary-color);
         opacity: 0;
@@ -93,4 +93,4 @@ class AlarmoButton extends LitElement {
     `;
   }
 }
-customElements.define('alarmo-button', AlarmoButton);
+customElements.define("alarmo-button", AlarmoButton);

@@ -1,9 +1,9 @@
-import { LitElement, html, css, PropertyValues } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import { ICONS, PENDING_STATES } from '../const';
-import { fetchCountdown } from '../data/websockets';
-import { HomeAssistant } from '../lib/types';
-import { fireEvent } from '../lib/fire-event';
+import { LitElement, html, css, PropertyValues } from "lit";
+import { property, state } from "lit/decorators.js";
+import { ICONS, PENDING_STATES } from "../const";
+import { fetchCountdown } from "../data/websockets";
+import { HomeAssistant } from "../lib/types";
+import { fireEvent } from "../lib/fire-event";
 
 class AlarmoStateBadge extends LitElement {
   @property()
@@ -23,11 +23,18 @@ class AlarmoStateBadge extends LitElement {
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!changedProps.size) return true;
-    const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
-    if (!oldHass || oldHass.themes !== this.hass!.themes || oldHass.language !== this.hass!.language) return true;
+    const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
     if (
-      oldHass.states[this.entity].state !== this.hass.states[this.entity].state ||
-      oldHass.states[this.entity].attributes.delay !== this.hass.states[this.entity].attributes.delay
+      !oldHass ||
+      oldHass.themes !== this.hass!.themes ||
+      oldHass.language !== this.hass!.language
+    )
+      return true;
+    if (
+      oldHass.states[this.entity].state !==
+        this.hass.states[this.entity].state ||
+      oldHass.states[this.entity].attributes.delay !==
+        this.hass.states[this.entity].attributes.delay
     ) {
       const oldState = oldHass.states[this.entity].state;
       const newState = this.hass.states[this.entity].state;
@@ -43,20 +50,20 @@ class AlarmoStateBadge extends LitElement {
     const state = this.hass.states[this.entity].state;
     if (PENDING_STATES.includes(state)) this.startTimer();
 
-    this.addEventListener('click', this.handleClick);
-    this.addEventListener('touchstart', () => {
+    this.addEventListener("click", this.handleClick);
+    this.addEventListener("touchstart", () => {
       this._touchStarted = true;
     });
-    this.addEventListener('touchend', () => {
+    this.addEventListener("touchend", () => {
       setTimeout(() => {
         this._touchStarted = false;
       }, 10);
     });
-    this.addEventListener('mouseenter', () => {
+    this.addEventListener("mouseenter", () => {
       if (this._touchStarted) return;
       this._hover = true;
     });
-    this.addEventListener('mouseleave', () => {
+    this.addEventListener("mouseleave", () => {
       this._hover = false;
     });
   }
@@ -66,7 +73,9 @@ class AlarmoStateBadge extends LitElement {
     fetchCountdown(this.hass, this.entity)
       .then((countdownConfig) => {
         this.duration = countdownConfig.delay;
-        this.datetime = new Date(new Date().getTime() + countdownConfig.remaining * 1000);
+        this.datetime = new Date(
+          new Date().getTime() + countdownConfig.remaining * 1000,
+        );
       })
       .catch((_e) => {});
 
@@ -109,11 +118,11 @@ class AlarmoStateBadge extends LitElement {
   handleClick() {
     const state = this.hass.states[this.entity].state;
     if (PENDING_STATES.includes(state) && this.timer) {
-      this.hass!.callService('alarmo', 'skip_delay', {
+      this.hass!.callService("alarmo", "skip_delay", {
         entity_id: this.entity,
       });
     } else {
-      fireEvent(this, 'hass-more-info', { entityId: this.entity });
+      fireEvent(this, "hass-more-info", { entityId: this.entity });
     }
   }
 
@@ -127,10 +136,16 @@ class AlarmoStateBadge extends LitElement {
 
     return html`
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g class="track ${stateObj.state.split('_').shift()} ${timerRunning ? 'timer' : ''}">
+        <g
+          class="track ${stateObj.state.split("_").shift()} ${timerRunning
+            ? "timer"
+            : ""}"
+        >
           <circle cx="${c}" cy="${c}" r="${r}"></circle>
           <path
-            stroke-dasharray="${(this.getFraction() * arcLength).toFixed(2)} ${arcLength.toFixed(2)}"
+            stroke-dasharray="${(this.getFraction() * arcLength).toFixed(
+              2,
+            )} ${arcLength.toFixed(2)}"
             class="remaining"
             d="
               M ${c}, ${c}
@@ -141,7 +156,11 @@ class AlarmoStateBadge extends LitElement {
           ></path>
         </g>
       </svg>
-      <div class="overlay ${stateObj.state.split('_').shift()} ${timerRunning ? 'timer' : ''}">
+      <div
+        class="overlay ${stateObj.state.split("_").shift()} ${timerRunning
+          ? "timer"
+          : ""}"
+      >
         <div class="value">${this._stateValue(stateObj.state)}</div>
       </div>
     `;
@@ -226,4 +245,4 @@ class AlarmoStateBadge extends LitElement {
     `;
   }
 }
-customElements.define('alarmo-state-badge', AlarmoStateBadge);
+customElements.define("alarmo-state-badge", AlarmoStateBadge);

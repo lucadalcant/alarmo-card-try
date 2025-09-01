@@ -293,7 +293,9 @@ var De=function(e){return function(t,i){void 0!==i?i.addInitializer((function(){
       }
     `}};t([Be({attribute:!1})],ri.prototype,"hass",void 0),t([Ie()],ri.prototype,"_config",void 0),t([Ie()],ri.prototype,"_alarmoConfig",void 0),t([Ie()],ri.prototype,"_entities",void 0),t([Ie()],ri.prototype,"_editAction",void 0),ri=t([De("alarmo-card-editor")],ri);var li,ci,di=Object.freeze({__proto__:null,get AlarmoCardEditor(){return ri}});class hi extends Ue{constructor(){super(...arguments),this.duration=0,this.datetime=null,this.timer=0,this._touchStarted=!1,this._hover=!1}shouldUpdate(e){if(!e.size)return!0;const t=e.get("hass");if(!t||t.themes!==this.hass.themes||t.language!==this.hass.language)return!0;if(t.states[this.entity].state!==this.hass.states[this.entity].state||t.states[this.entity].attributes.delay!==this.hass.states[this.entity].attributes.delay){const e=t.states[this.entity].state,i=this.hass.states[this.entity].state;return Ye.includes(i)?this.startTimer():Ye.includes(e)&&this.stopTimer(),!0}return!1}firstUpdated(){const e=this.hass.states[this.entity].state;Ye.includes(e)&&this.startTimer(),this.addEventListener("click",this.handleClick),this.addEventListener("touchstart",(()=>{this._touchStarted=!0})),this.addEventListener("touchend",(()=>{setTimeout((()=>{this._touchStarted=!1}),10)})),this.addEventListener("mouseenter",(()=>{this._touchStarted||(this._hover=!0)})),this.addEventListener("mouseleave",(()=>{this._hover=!1}))}async startTimer(){var e,t;clearInterval(this.timer),(e=this.hass,t=this.entity,e.callWS({type:"alarmo/countdown",entity_id:t})).then((e=>{this.duration=e.delay,this.datetime=new Date((new Date).getTime()+1e3*e.remaining)})).catch((e=>{})),this.timer=window.setInterval((()=>{this.requestUpdate()}),1e3)}stopTimer(){clearInterval(this.timer),this.datetime=null,this.duration=0}getRemaining(){if(!this.datetime)return 0;const e=(this.datetime.getTime()-(new Date).getTime())/1e3;return e<0?(clearInterval(this.timer),0):e}getFraction(){return this.duration?(Math.round(this.getRemaining())-1)/this.duration:1}_stateValue(e){return this._hover&&Ye.includes(e)&&this.timer?me` <ha-icon icon="mdi:skip-forward"></ha-icon> `:this.datetime&&this.duration?me` ${Math.max(Math.round(this.getRemaining()),0)} `:me` <ha-icon .icon=${Ze[e]}></ha-icon> `}handleClick(){const e=this.hass.states[this.entity].state;Ye.includes(e)&&this.timer?this.hass.callService("alarmo","skip_delay",{entity_id:this.entity}):si(this,"hass-more-info",{entityId:this.entity})}render(){let e=45,t=2*Math.PI*e;const i=this.hass.states[this.entity],a=this.datetime&&this.duration;return me`
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <g class="track ${i.state.split("_").shift()} ${a?"timer":""}">
+        <g
+          class="track ${i.state.split("_").shift()} ${a?"timer":""}"
+        >
           <circle cx="${50}" cy="${50}" r="${e}"></circle>
           <path
             stroke-dasharray="${(this.getFraction()*t).toFixed(2)} ${t.toFixed(2)}"
@@ -307,7 +309,9 @@ var De=function(e){return function(t,i){void 0!==i?i.addInitializer((function(){
           ></path>
         </g>
       </svg>
-      <div class="overlay ${i.state.split("_").shift()} ${a?"timer":""}">
+      <div
+        class="overlay ${i.state.split("_").shift()} ${a?"timer":""}"
+      >
         <div class="value">${this._stateValue(i.state)}</div>
       </div>
     `}static get styles(){return L`
@@ -386,10 +390,16 @@ var De=function(e){return function(t,i){void 0!==i?i.addInitializer((function(){
         }
       }
     `}}t([Be()],hi.prototype,"hass",void 0),t([Be()],hi.prototype,"entity",void 0),t([Ie()],hi.prototype,"_hover",void 0),customElements.define("alarmo-state-badge",hi),function(e){e.language="language",e.system="system",e.comma_decimal="comma_decimal",e.decimal_comma="decimal_comma",e.space_comma="space_comma",e.none="none"}(li||(li={})),function(e){e.language="language",e.system="system",e.am_pm="12",e.twenty_four="24"}(ci||(ci={}));class ui extends Ue{shouldUpdate(e){const t=e.get("hass");return!t||!(!this.entity||t.states[this.entity]===this.hass.states[this.entity])}render(){if(!this.hass||!this.entity)return me``;const e=this.entity in this.hass.states;let t=Object.assign({},this.hass.states[this.entity]);void 0!==this.state&&(t=Object.assign(Object.assign({},t),{state:this.state}));const i=e?ii(t,this.hass.localize):this.hass.localize("state.default.unavailable",this.hass.locale||{language:this.hass.language,number_format:li.language}),a=e?t.attributes.friendly_name||(o=t.entity_id).substring(o.indexOf(".")+1):this.entity;var o;let n=!!this.state||"on"==t.state;return me`
-      <div class="badge-container" @click=${()=>si(this,"hass-more-info",{entityId:this.entity})}>
+      <div
+        class="badge-container"
+        @click=${()=>si(this,"hass-more-info",{entityId:this.entity})}
+      >
         <div class="label-badge ${n?"active":""}" id="badge">
           <div class="value">
-            <ha-state-icon .hass=${this.hass} .stateObj=${t}></ha-state-icon>
+            <ha-state-icon
+              .hass=${this.hass}
+              .stateObj=${t}
+            ></ha-state-icon>
             <div class="label">
               <span>${i}</span>
             </div>
@@ -497,7 +507,7 @@ var De=function(e){return function(t,i){void 0!==i?i.addInitializer((function(){
         right: 0;
         bottom: 0;
         left: 0;
-        content: '';
+        content: "";
         border-radius: 4px;
         background: var(--primary-color);
         opacity: 0;
@@ -549,7 +559,11 @@ var De=function(e){return function(t,i){void 0!==i?i.addInitializer((function(){
       <span>${t}</span>
     </div>
   `}}hassSubscribe(){return[this.hass.connection.subscribeMessage((e=>this._fetchData(e)),{type:Je})]}async _fetchData(e){var t;if(e.data.area_id===(null===(t=this._params)||void 0===t?void 0:t.area_id))switch(e.data.event){case Ke.Disarm:case Ke.Arm:case Ke.Trigger:this._confirm(e.data.event);break;case Ke.InvalidCodeProvided:case Ke.NoCodeProvided:this._showCodeError();break;case Ke.FailedToArm:case Ke.CommandNotAllowed:this._confirm(e.data.event);case Ke.TriggerTimeExpired:case Ke.ReadyToArmModesChanged:}}shouldUpdate(e){const t=e.get("hass");return!(!e.has("_params")&&this._params)||(!!e.has("_input")||(!t||t.states[this._params.entity_id]!==this.hass.states[this._params.entity_id]&&(t.states[this._params.entity_id],this.hass.states[this._params.entity_id],!0)))}firstUpdated(e){super.firstUpdated(e),this.addEventListener("keypress",(e=>{"Enter"===e.key&&this._input.length&&this._submit()}))}async showDialog(e){this._params=e,this._input="",this._narrow=matchMedia("all and (max-width: 450px), all and (max-height: 500px)").matches,await this.updateComplete}closeDialog(){return this._params=void 0,this._showClearButton=!1,!0}_showCodeError(){var e;const t=null===(e=this.shadowRoot)||void 0===e?void 0:e.querySelector("#code");t&&(t.classList.remove("error"),t.classList.add("error"),t.invalid=!0)}_clearCodeError(){var e;const t=null===(e=this.shadowRoot)||void 0===e?void 0:e.querySelector("#code");t&&t.classList.contains("error")&&(t.classList.remove("error"),t.invalid=!1,this._input="",this._cancelCodeClearTimer())}_clearCode(){this._input="",this._clearCodeError(),this._cancelCodeClearTimer()}_setCodeClearTimer(){this._cancelCodeClearTimer(),this._input.length&&(this._codeClearTimer=window.setTimeout((()=>{this._clearCode()}),12e4))}_cancelCodeClearTimer(){this._codeClearTimer&&clearTimeout(this._codeClearTimer)}_submit(){var e;const t=null!==(e=this._input)&&void 0!==e?e:"";this._clearCodeError(),this._params.action==We.Disarm?this.hass.callService("alarmo","disarm",{entity_id:this._params.entity_id,code:t}):this.hass.callService("alarmo","arm",Object.assign(Object.assign({},this._params.armOptions),{entity_id:this._params.entity_id,mode:Ge[this._params.action],code:t}))}_confirm(e){var t,i;null===(i=null===(t=this._params)||void 0===t?void 0:t.confirm)||void 0===i||i.call(t,e),this.closeDialog()}_cancel(){var e,t;null===(t=null===(e=this._params)||void 0===e?void 0:e.cancel)||void 0===t||t.call(e),this.closeDialog()}_numberClick(e){const t=e.currentTarget.value;this._clearCodeError(),this._setCodeClearTimer(),this._input=this._input+t,this._showClearButton=!0}_clear(){this._input="",this._showClearButton=!1}render(){if(!this._params||!this.hass)return be;return"text"===this._params.code_format?me`
-        <ha-dialog open @closed=${this._cancel} .heading=${this.hass.localize("ui.dialogs.enter_code.title")}>
+        <ha-dialog
+          open
+          @closed=${this._cancel}
+          .heading=${this.hass.localize("ui.dialogs.enter_code.title")}
+        >
           <ha-textfield
             class="input"
             ?dialogInitialFocus=${!this._narrow}
@@ -564,7 +578,9 @@ var De=function(e){return function(t,i){void 0!==i?i.addInitializer((function(){
           <ha-button slot="secondaryAction" dialogAction="cancel">
             ${this.hass.localize("ui.common.cancel")}
           </ha-button>
-          <ha-button @click=${this._submit} slot="primaryAction"> ${this.hass.localize("ui.common.submit")} </ha-button>
+          <ha-button @click=${this._submit} slot="primaryAction">
+            ${this.hass.localize("ui.common.submit")}
+          </ha-button>
         </ha-dialog>
       `:me`
       <ha-dialog
@@ -604,7 +620,11 @@ var De=function(e){return function(t,i){void 0!==i?i.addInitializer((function(){
                           <ha-svg-icon path=${"M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"}></ha-svg-icon>
                         </ha-control-button>
                       `:me`
-                        <ha-control-button .value=${e} @click=${this._numberClick} .label=${e}>
+                        <ha-control-button
+                          .value=${e}
+                          @click=${this._numberClick}
+                          .label=${e}
+                        >
                           ${e}
                         </ha-control-button>
                       `))}

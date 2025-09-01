@@ -1,21 +1,36 @@
-import { mdiCheck, mdiClose } from '@mdi/js';
-import { css, html, LitElement, nothing, PropertyValues, TemplateResult } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
-import { UnsubscribeFunc } from 'home-assistant-js-websocket';
-import { AlarmoEntity, AlarmoEvent } from '../types';
-import { ActionToState, AlarmoEvents, AlarmStates, ArmActions, EVENT, FORMAT_NUMBER } from '../const';
-import { SubscribeMixin } from '../subscribe-mixin';
-import { HomeAssistant } from '../lib/types';
+import { mdiCheck, mdiClose } from "@mdi/js";
+import {
+  css,
+  html,
+  LitElement,
+  nothing,
+  PropertyValues,
+  TemplateResult,
+} from "lit";
+import { customElement, property, query, state } from "lit/decorators.js";
+import { UnsubscribeFunc } from "home-assistant-js-websocket";
+import { AlarmoEntity, AlarmoEvent } from "../types";
+import {
+  ActionToState,
+  AlarmoEvents,
+  AlarmStates,
+  ArmActions,
+  EVENT,
+  FORMAT_NUMBER,
+} from "../const";
+import { SubscribeMixin } from "../subscribe-mixin";
+import { HomeAssistant } from "../lib/types";
 
 type ValidHassDomEvent = keyof HASSDomEvents;
 
-export interface HassDialog<T = HASSDomEvents[ValidHassDomEvent]> extends HTMLElement {
+export interface HassDialog<T = HASSDomEvents[ValidHassDomEvent]>
+  extends HTMLElement {
   showDialog(params: T);
   closeDialog?: () => boolean;
 }
 
 export interface CodeDialogParams {
-  code_format: 'text' | 'number';
+  code_format: "text" | "number";
   area_id?: string | number | null;
   entity_id: string;
   action: ArmActions;
@@ -24,15 +39,31 @@ export interface CodeDialogParams {
   cancel?: () => void;
 }
 
-const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'clear', 'submit'];
+const BUTTONS = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "0",
+  "clear",
+  "submit",
+];
 
-@customElement('alarmo-code-dialog')
-export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements HassDialog<CodeDialogParams> {
+@customElement("alarmo-code-dialog")
+export class AlarmoCodeDialog
+  extends SubscribeMixin(LitElement)
+  implements HassDialog<CodeDialogParams>
+{
   @property({ attribute: false }) public hass?: HomeAssistant;
 
   @state() private _params?: CodeDialogParams;
 
-  @state() private _input = '';
+  @state() private _input = "";
 
   @state() private _showClearButton = false;
 
@@ -42,7 +73,10 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
 
   public hassSubscribe(): Promise<UnsubscribeFunc>[] {
     return [
-      this.hass!.connection.subscribeMessage((ev) => this._fetchData(ev as unknown as AlarmoEvent), { type: EVENT }),
+      this.hass!.connection.subscribeMessage(
+        (ev) => this._fetchData(ev as unknown as AlarmoEvent),
+        { type: EVENT },
+      ),
     ];
   }
 
@@ -76,13 +110,18 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
   }
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
-    const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
-    if (changedProps.has('_params') || !this._params) return true;
-    else if (changedProps.has('_input')) return true;
+    const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
+    if (changedProps.has("_params") || !this._params) return true;
+    else if (changedProps.has("_input")) return true;
     else if (!oldHass) return true;
-    else if (oldHass.states[this._params!.entity_id] !== this.hass!.states[this._params!.entity_id]) {
+    else if (
+      oldHass.states[this._params!.entity_id] !==
+      this.hass!.states[this._params!.entity_id]
+    ) {
       const oldState = oldHass.states[this._params!.entity_id] as AlarmoEntity;
-      const newState = this.hass!.states[this._params!.entity_id] as AlarmoEntity;
+      const newState = this.hass!.states[
+        this._params!.entity_id
+      ] as AlarmoEntity;
       //this.processStateUpdate(oldState, newState);
       return true;
     }
@@ -95,8 +134,8 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
 
   protected firstUpdated(changedProps) {
     super.firstUpdated(changedProps);
-    this.addEventListener('keypress', (ev) => {
-      if (ev.key === 'Enter' && this._input.length) {
+    this.addEventListener("keypress", (ev) => {
+      if (ev.key === "Enter" && this._input.length) {
         this._submit();
       }
     });
@@ -104,8 +143,10 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
 
   public async showDialog(dialogParams: CodeDialogParams): Promise<void> {
     this._params = dialogParams;
-    this._input = '';
-    this._narrow = matchMedia('all and (max-width: 450px), all and (max-height: 500px)').matches;
+    this._input = "";
+    this._narrow = matchMedia(
+      "all and (max-width: 450px), all and (max-height: 500px)",
+    ).matches;
     await this.updateComplete;
   }
 
@@ -116,26 +157,26 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
   }
 
   private _showCodeError() {
-    const inputField = this.shadowRoot?.querySelector('#code');
+    const inputField = this.shadowRoot?.querySelector("#code");
     if (inputField) {
-      inputField.classList.remove('error');
-      inputField.classList.add('error');
+      inputField.classList.remove("error");
+      inputField.classList.add("error");
       (inputField as any).invalid = true;
     }
   }
 
   private _clearCodeError() {
-    const inputField = this.shadowRoot?.querySelector('#code');
-    if (inputField && inputField.classList.contains('error')) {
-      inputField.classList.remove('error');
+    const inputField = this.shadowRoot?.querySelector("#code");
+    if (inputField && inputField.classList.contains("error")) {
+      inputField.classList.remove("error");
       (inputField as any).invalid = false;
-      this._input = '';
+      this._input = "";
       this._cancelCodeClearTimer();
     }
   }
 
   private _clearCode() {
-    this._input = '';
+    this._input = "";
     this._clearCodeError();
     this._cancelCodeClearTimer();
   }
@@ -156,16 +197,16 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
   }
 
   private _submit(): void {
-    const code = this._input ?? '';
+    const code = this._input ?? "";
     this._clearCodeError();
 
     if (this._params!.action == ArmActions.Disarm) {
-      this.hass!.callService('alarmo', 'disarm', {
+      this.hass!.callService("alarmo", "disarm", {
         entity_id: this._params!.entity_id,
         code: code,
       });
     } else {
-      this.hass!.callService('alarmo', 'arm', {
+      this.hass!.callService("alarmo", "arm", {
         ...this._params!.armOptions,
         entity_id: this._params!.entity_id,
         mode: ActionToState[this._params!.action],
@@ -193,14 +234,17 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
   }
 
   private _clear(): void {
-    this._input = '';
+    this._input = "";
     this._showClearButton = false;
   }
 
-  private createCloseHeading = (hass: HomeAssistant | undefined, title: string | TemplateResult) => html`
+  private createCloseHeading = (
+    hass: HomeAssistant | undefined,
+    title: string | TemplateResult,
+  ) => html`
     <div class="header_title">
       <ha-icon-button
-        .label=${hass?.localize('ui.common.close') ?? 'Close'}
+        .label=${hass?.localize("ui.common.close") ?? "Close"}
         .path=${mdiClose}
         dialogAction="close"
         class="header_button"
@@ -214,17 +258,21 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
       return nothing;
     }
 
-    const isText = this._params.code_format === 'text';
+    const isText = this._params.code_format === "text";
 
     if (isText) {
       return html`
-        <ha-dialog open @closed=${this._cancel} .heading=${this.hass.localize('ui.dialogs.enter_code.title')}>
+        <ha-dialog
+          open
+          @closed=${this._cancel}
+          .heading=${this.hass.localize("ui.dialogs.enter_code.title")}
+        >
           <ha-textfield
             class="input"
             ?dialogInitialFocus=${!this._narrow}
             .value=${this._input}
             id="code"
-            .label=${this.hass.localize('ui.dialogs.enter_code.input_label')}
+            .label=${this.hass.localize("ui.dialogs.enter_code.input_label")}
             type="password"
             inputmode="text"
             @input=${(ev: Event) => {
@@ -235,9 +283,11 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
             @focus=${this._clearCodeError}
           ></ha-textfield>
           <ha-button slot="secondaryAction" dialogAction="cancel">
-            ${this.hass.localize('ui.common.cancel')}
+            ${this.hass.localize("ui.common.cancel")}
           </ha-button>
-          <ha-button @click=${this._submit} slot="primaryAction"> ${this.hass.localize('ui.common.submit')} </ha-button>
+          <ha-button @click=${this._submit} slot="primaryAction">
+            ${this.hass.localize("ui.common.submit")}
+          </ha-button>
         </ha-dialog>
       `;
     }
@@ -245,7 +295,10 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
     return html`
       <ha-dialog
         open
-        .heading=${this.createCloseHeading(this.hass, this.hass.localize('ui.dialogs.enter_code.title'))}
+        .heading=${this.createCloseHeading(
+          this.hass,
+          this.hass.localize("ui.dialogs.enter_code.title"),
+        )}
         @closed=${this._cancel}
         hideActions
       >
@@ -255,7 +308,7 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
             ?dialogInitialFocus=${!this._narrow}
             .value=${this._input}
             id="code"
-            .label=${this.hass.localize('ui.dialogs.enter_code.input_label')}
+            .label=${this.hass.localize("ui.dialogs.enter_code.input_label")}
             type="password"
             inputmode="numeric"
             @input=${(ev: Event) => {
@@ -267,34 +320,38 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
           ></ha-textfield>
           <div class="keypad">
             ${BUTTONS.map((value) =>
-              value === ''
+              value === ""
                 ? html`<span></span>`
-                : value === 'clear'
+                : value === "clear"
                   ? html`
                       <ha-control-button
                         @click=${this._clear}
                         class="clear"
                         .disabled=${!this._showClearButton}
-                        .label=${this.hass!.localize('ui.common.clear')}
+                        .label=${this.hass!.localize("ui.common.clear")}
                       >
                         <ha-svg-icon path=${mdiClose}></ha-svg-icon>
                       </ha-control-button>
                     `
-                  : value === 'submit'
+                  : value === "submit"
                     ? html`
                         <ha-control-button
                           @click=${this._submit}
                           class="submit"
-                          .label=${this.hass!.localize('ui.common.submit')}
+                          .label=${this.hass!.localize("ui.common.submit")}
                         >
                           <ha-svg-icon path=${mdiCheck}></ha-svg-icon>
                         </ha-control-button>
                       `
                     : html`
-                        <ha-control-button .value=${value} @click=${this._numberClick} .label=${value}>
+                        <ha-control-button
+                          .value=${value}
+                          @click=${this._numberClick}
+                          .label=${value}
+                        >
                           ${value}
                         </ha-control-button>
-                      `
+                      `,
             )}
           </div>
         </div>
@@ -389,6 +446,6 @@ export class AlarmoCodeDialog extends SubscribeMixin(LitElement) implements Hass
 
 declare global {
   interface HTMLElementTagNameMap {
-    'alarmo-code-dialog': AlarmoCodeDialog;
+    "alarmo-code-dialog": AlarmoCodeDialog;
   }
 }

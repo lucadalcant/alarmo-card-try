@@ -1,10 +1,17 @@
-import { LitElement, html, css, PropertyValues, TemplateResult, CSSResult } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import { HassEntity } from 'home-assistant-js-websocket';
-import { computeStateDisplay } from '../data/entity';
-import { HomeAssistant, NumberFormat } from '../lib/types';
-import { computeEntity } from '../lib/compute-entity';
-import { fireEvent } from '../lib/fire-event';
+import {
+  LitElement,
+  html,
+  css,
+  PropertyValues,
+  TemplateResult,
+  CSSResult,
+} from "lit";
+import { property, state } from "lit/decorators.js";
+import { HassEntity } from "home-assistant-js-websocket";
+import { computeStateDisplay } from "../data/entity";
+import { HomeAssistant, NumberFormat } from "../lib/types";
+import { computeEntity } from "../lib/compute-entity";
+import { fireEvent } from "../lib/fire-event";
 
 class AlarmoSensorBadge extends LitElement {
   @property()
@@ -17,9 +24,13 @@ class AlarmoSensorBadge extends LitElement {
   public state?: string;
 
   shouldUpdate(changedProps: PropertyValues) {
-    const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
+    const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
     if (!oldHass) return true;
-    if (this.entity && oldHass.states[this.entity] !== this.hass!.states[this.entity]) return true;
+    if (
+      this.entity &&
+      oldHass.states[this.entity] !== this.hass!.states[this.entity]
+    )
+      return true;
     return false;
   }
 
@@ -31,17 +42,29 @@ class AlarmoSensorBadge extends LitElement {
     const value = validEntity
       ? computeStateDisplay(stateObj, this.hass.localize)
       : this.hass.localize(
-          'state.default.unavailable',
-          this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language }
+          "state.default.unavailable",
+          this.hass.locale || {
+            language: this.hass.language,
+            number_format: NumberFormat.language,
+          },
         );
-    const name = validEntity ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id) : this.entity;
-    let binaryState = this.state ? true : stateObj.state == 'on';
+    const name = validEntity
+      ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id)
+      : this.entity;
+    let binaryState = this.state ? true : stateObj.state == "on";
 
     return html`
-      <div class="badge-container" @click=${() => fireEvent(this, 'hass-more-info', { entityId: this.entity! })}>
-        <div class="label-badge ${binaryState ? 'active' : ''}" id="badge">
+      <div
+        class="badge-container"
+        @click=${() =>
+          fireEvent(this, "hass-more-info", { entityId: this.entity! })}
+      >
+        <div class="label-badge ${binaryState ? "active" : ""}" id="badge">
           <div class="value">
-            <ha-state-icon .hass=${this.hass} .stateObj=${stateObj}></ha-state-icon>
+            <ha-state-icon
+              .hass=${this.hass}
+              .stateObj=${stateObj}
+            ></ha-state-icon>
             <div class="label">
               <span>${value}</span>
             </div>
@@ -125,4 +148,4 @@ class AlarmoSensorBadge extends LitElement {
   }
 }
 
-customElements.define('alarmo-sensor-badge', AlarmoSensorBadge);
+customElements.define("alarmo-sensor-badge", AlarmoSensorBadge);
