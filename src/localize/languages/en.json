@@ -1,0 +1,33 @@
+{
+  "arm_options": {
+    "heading": "Options for arming",
+    "skip_delay": "Skip exit delay",
+    "force": "Bypass open sensors"
+  },
+  "editor": {
+    "keep_keypad_visible": "Keep the keypad always visible, also when no code input is required.",
+    "button_scale_actions": "Scaling factor to apply for resizing the action buttons.",
+    "button_scale_keypad": "Scaling factor to apply for resizing the keypad buttons.",
+    "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
+    "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
+    "show_ready_indicator": "Show ready/not ready indicator on arm mode buttons.",
+    "show_bypassed_sensors": "Show warning message when alarm is armed with bypassed sensors.",
+    "use_code_dialog": "Display the keypad for entering the code as a popup dialog.",
+    "hide_keypad": "Hide the keypad buttons for entering the code.",
+    "available_actions": "Available actions:",
+    "show_code_inputfield": "Show code input field", 
+    "show_header": "Show header",
+    "use_arm_button_icons": "Use icons on action buttons (instead of labels)",
+    "action_dialog": {
+      "title": "Customize display of action '{action}'",
+      "show_button": "Show button for this action",
+      "button_label": "Override button label",
+      "state_label": "Override state label"
+    }
+  },
+  "errors": {
+    "blocking_sensors": "Could not arm due to the following sensors",
+    "triggered_sensors": "Alarm was triggered by the following sensors",
+    "bypassed_sensors": "There are bypassed sensors"
+  }
+}
